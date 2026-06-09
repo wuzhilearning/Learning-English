@@ -1,0 +1,30 @@
+name: 同步到 Gitee
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  sync-to-gitee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 迁出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 同步到 Gitee
+        uses: wearerequired/git-mirror-action@master
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_TOKEN }}
+        with:
+          source-repo: "git@github.com:wuzhilearning/Learning-English.git"
+          destination-repo: "git@gitee.com:wangxiaoqiangwww/Learning-English.git"
+
+      - name: 构建 Gitee Pages
+        uses: yanglbme/gitee-pages-action@main
+        with:
+          gitee-username: ${{ secrets.GITEE_USERNAME }}
+          gitee-password: ${{ secrets.GITEE_TOKEN }}
+          gitee-repo: wangxiaoqiangwww/Learning-English
+          branch: master
