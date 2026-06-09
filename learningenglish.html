@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>英语学习网站导航 · 经典功能版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            padding: 2rem 1.5rem;
+            background: var(--bg-body);
+            color: var(--text-primary);
+        }
+
+        /* 主题变量 */
+        :root {
+            --bg-body: #f4f7fc;
+            --bg-card: white;
+            --text-primary: #0c2b3b;
+            --text-secondary: #2c5a6e;
+            --border-light: #e2f0f0;
+            --tag-direct-bg: #e0f2e9;
+            --tag-direct-text: #1f6e55;
+            --tag-vpn-bg: #feede4;
+            --tag-vpn-text: #c25e1a;
+            --btn-bg: #eef3fc;
+            --btn-hover: #e0ebf3;
+            --btn-primary: #1f7b5e;
+            --star-active: #f5b042;
+            --star-inactive: #cbd5e1;
+        }
+
+        body.dark {
+            --bg-body: #121826;
+            --bg-card: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-light: #334155;
+            --tag-direct-bg: #2d4a3e;
+            --tag-direct-text: #86efac;
+            --tag-vpn-bg: #4a3a2c;
+            --tag-vpn-text: #fdba74;
+            --btn-bg: #334155;
+            --btn-hover: #475569;
+            --btn-primary: #2c9b77;
+            --star-inactive: #475569;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 头部 + 主题切换 + 搜索 */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 2.3rem;
+            background: linear-gradient(135deg, #1e4b6e, #2c9b77);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--btn-bg);
+            border: none;
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .search-wrapper {
+            max-width: 550px;
+            margin: 1.5rem auto 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border-radius: 80px;
+            padding: 0.5rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 1rem;
+            padding: 0.8rem 0.2rem;
+            color: var(--text-primary);
+        }
+
+        .search-box button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* 过滤按钮组 */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0 1.5rem;
+        }
+
+        .filter-btn {
+            background: var(--btn-bg);
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--btn-primary);
+            color: white;
+        }
+
+        /* 分区样式 */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            padding-left: 0.5rem;
+            border-left: 6px solid;
+        }
+
+        .section-title.direct { border-left-color: #2c9b77; }
+        .section-title.vpn { border-left-color: #e67e22; }
+
+        .section-count {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* 卡片 */
+        .card {
+            background: var(--bg-card);
+            border-radius: 28px;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid var(--border-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -12px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--star-inactive);
+            transition: 0.1s;
+        }
+
+        .star-btn.active {
+            color: var(--star-active);
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 0.6rem 0;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            background: var(--btn-bg);
+            color: var(--text-secondary);
+        }
+
+        .access-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.75rem;
+            border-radius: 30px;
+        }
+
+        .tag-direct { background: var(--tag-direct-bg); color: var(--tag-direct-text); }
+        .tag-vpn { background: var(--tag-vpn-bg); color: var(--tag-vpn-text); }
+
+        .card-desc {
+            color: var(--text-secondary);
+            line-height: 1.45;
+            margin: 0.6rem 0;
+            font-size: 0.9rem;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-link {
+            background: var(--btn-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-link:hover { background: var(--btn-hover); }
+        .btn-primary { background: var(--btn-primary); color: white; }
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .free-badge {
+            font-size: 0.7rem;
+            background: #fff0db;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            color: #b45f1b;
+        }
+        body.dark .free-badge { background: #4a3a2c; color: #fdba74; }
+
+        .no-results {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 2rem;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-light);
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .section-title { font-size: 1.4rem; }
+            .resources-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换暗色模式">🌙 暗色</button>
+        <h1>🌍 英语学习网站导航</h1>
+        <p>国内直连 · 分类标签 · 收藏常用 · 一键复制</p>
+        <div class="search-wrapper">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 搜索名称、描述或标签" autocomplete="off">
+                <button id="clearSearchBtn">✖️</button>
+            </div>
+        </div>
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="favorites">⭐ 收藏</button>
+        </div>
+    </div>
+
+    <!-- 直接访问区域 -->
+    <div class="section" id="directSection">
+        <div class="section-header">
+            <div class="section-title direct">✅ 国内网络可直接访问</div>
+            <div class="section-count" id="directCount"></div>
+        </div>
+        <div id="directGrid" class="resources-grid"></div>
+    </div>
+
+    <!-- 需工具区域 -->
+    <div class="section" id="vpnSection">
+        <div class="section-header">
+            <div class="section-title vpn">⚠️ 可能需要特殊网络工具</div>
+            <div class="section-count" id="vpnCount"></div>
+        </div>
+        <div id="vpnGrid" class="resources-grid"></div>
+    </div>
+    <footer>💡 点击⭐收藏常用网站（本地存储） · 点击📋复制网址 · 支持标签筛选与暗色模式</footer>
+</div>
+
+<script>
+    // 网站数据（增加 tags 标签字段）
+    const directSites = [
+        { name: "可可英语", desc: "国内老牌，VOA/BBC精讲、影视口语、场景对话。", url: "https://www.kekenet.com/", tags: ["听力", "口语", "综合"] },
+        { name: "Gamestolearnenglish", desc: "通过小游戏掌握基础词汇、动词词组及时态。", url: "https://www.gamestolelearnenglish.com/", tags: ["游戏", "词汇", "语法"] },
+        { name: "Many Things", desc: "游戏式学俚语、谚语、动词短语，趣味练习。", url: "http://www.manythings.org/", tags: ["游戏", "俚语", "词汇"] }
+    ];
+
+    const vpnSites = [
+        { name: "BBC Learning English", desc: "正统英音，新闻/6分钟英语/地道短语。", url: "https://www.bbc.co.uk/learningenglish/", tags: ["听力", "英音", "新闻"] },
+        { name: "Langeek", desc: "全能词汇语法，短语、动词搭配、习语，支持中文。", url: "https://langeek.co/en-ZH", tags: ["词汇", "语法", "短语"] },
+        { name: "Learn English Fast", desc: "AI驱动场景对话训练，写作批改，单词复习。", url: "https://learningenglishfast.com/", tags: ["AI对话", "写作", "场景"] },
+        { name: "English Club", desc: "综合ESL站点，语法、词汇、日常对话。", url: "https://www.englishclub.com/", tags: ["综合", "语法", "对话"] },
+        { name: "Phrasal Verb Demon", desc: "专门攻克短语动词，get/take/put组合。", url: "https://www.phrasalverbdemon.com/", tags: ["短语动词", "词汇"] },
+        { name: "Daily ESL", desc: "日常对话听力+文本，50+主题。", url: "http://www.dailyesl.com/", tags: ["听力", "对话"] },
+        { name: "英语坊", desc: "趣味闯关式主题口语，AI聊天机器人。", url: "https://englishfun.com/", tags: ["口语", "游戏", "AI"] }
+    ];
+
+    // 收藏存储 key
+    const STORAGE_KEY = "fav_sites";
+
+    // 获取收藏列表（存储url）
+    let favorites = new Set();
+    function loadFavorites() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                const arr = JSON.parse(stored);
+                favorites = new Set(arr);
+            } catch(e) {}
+        }
+    }
+    function saveFavorites() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...favorites]));
+    }
+    function toggleFavorite(url) {
+        if (favorites.has(url)) favorites.delete(url);
+        else favorites.add(url);
+        saveFavorites();
+        renderAll(); // 重新渲染
+    }
+
+    // 全局变量
+    let currentFilter = "all"; // all / favorites
+    let searchKeyword = "";
+
+    // 合并所有网站（带 type 标识）
+    const allSites = [
+        ...directSites.map(s => ({ ...s, access: "direct" })),
+        ...vpnSites.map(s => ({ ...s, access: "vpn" }))
+    ];
+
+    // 辅助：检查是否匹配搜索和收藏筛选
+    function matchesFilters(site) {
+        // 收藏筛选
+        if (currentFilter === "favorites" && !favorites.has(site.url)) return false;
+        // 搜索关键词
+        if (searchKeyword) {
+            const kw = searchKeyword.toLowerCase();
+            return site.name.toLowerCase().includes(kw) ||
+                   site.desc.toLowerCase().includes(kw) ||
+                   site.tags.some(t => t.toLowerCase().includes(kw));
+        }
+        return true;
+    }
+
+    // 渲染分区
+    function renderSection(accessType, containerId, countId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        let filtered = allSites.filter(s => s.access === accessType && matchesFilters(s));
+        document.getElementById(countId).innerText = `${filtered.length} 个网站`;
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="no-results">😢 没有找到匹配的网站，试试其他关键词或取消收藏筛选</div>`;
+            return;
+        }
+        container.innerHTML = filtered.map(site => {
+            const isFav = favorites.has(site.url);
+            const accessTagClass = site.access === "direct" ? "tag-direct" : "tag-vpn";
+            const accessText = site.access === "direct" ? "✅ 可直接访问" : "⚠️ 需特殊工具";
+            return `
+                <div class="card" data-url="${escapeHtml(site.url)}">
+                    <div class="card-header">
+                        <span class="card-title">${escapeHtml(site.name)}</span>
+                        <button class="star-btn ${isFav ? 'active' : ''}" data-url="${escapeHtml(site.url)}" aria-label="收藏">${isFav ? '★' : '☆'}</button>
+                    </div>
+                    <div class="tags">
+                        <span class="access-tag ${accessTagClass}">${accessText}</span>
+                        ${site.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                    <div class="card-desc">${escapeHtml(site.desc)}</div>
+                    <div class="card-footer">
+                        <span class="free-badge">✨ 基础免费</span>
+                        <div style="display:flex; gap:8px;">
+                            <button class="copy-btn" data-url="${escapeHtml(site.url)}" title="复制网址">📋 复制</button>
+                            <a href="${escapeHtml(site.url)}" target="_blank" rel="noopener noreferrer" class="btn-link btn-primary">访问网站 →</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // 绑定收藏按钮事件
+        container.querySelectorAll('.star-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const url = btn.getAttribute('data-url');
+                toggleFavorite(url);
+            });
+        });
+        // 绑定复制按钮事件
+        container.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const url = btn.getAttribute('data-url');
+                try {
+                    await navigator.clipboard.writeText(url);
+                    const original = btn.innerText;
+                    btn.innerText = '✅ 已复制';
+                    setTimeout(() => btn.innerText = original, 1500);
+                } catch (err) {
+                    alert('复制失败，可手动复制');
+                }
+            });
+        });
+    }
+
+    function renderAll() {
+        renderSection("direct", "directGrid", "directCount");
+        renderSection("vpn", "vpnGrid", "vpnCount");
+    }
+
+    function escapeHtml(str) { 
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // 主题切换
+    function initTheme() {
+        const isDark = localStorage.getItem('theme') === 'dark' || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches && !localStorage.getItem('theme'));
+        if (isDark) document.body.classList.add('dark');
+        const btn = document.getElementById('themeToggle');
+        btn.innerText = document.body.classList.contains('dark') ? '☀️ 亮色' : '🌙 暗色';
+        btn.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            const isDarkNow = document.body.classList.contains('dark');
+            localStorage.setItem('theme', isDarkNow ? 'dark' : 'light');
+            btn.innerText = isDarkNow ? '☀️ 亮色' : '🌙 暗色';
+        });
+    }
+
+    // 搜索与筛选监听
+    function bindEvents() {
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearchBtn');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        searchInput.addEventListener('input', (e) => {
+            searchKeyword = e.target.value;
+            renderAll();
+        });
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchKeyword = '';
+            renderAll();
+        });
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                renderAll();
+            });
+        });
+    }
+
+    loadFavorites();
+    initTheme();
+    bindEvents();
+    renderAll();
+</script>
+</body>
+</html>
